@@ -16,7 +16,7 @@ namespace Console_Class
         public Person(string name, int age) :this(name) 
         {
             this.age = age;
-            Console.WriteLine("Person(string name, int age)" + name + this.age);
+            Console.WriteLine("Person(string name, int age)" + name + age);
         }
     }
 
