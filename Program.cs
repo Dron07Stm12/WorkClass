@@ -3,48 +3,41 @@ using System.Collections;
 
 namespace Console_Class
 {
-
     class Person
     {
         public string Name { get; set; }
-        //public Person(string name) => Name = name;
+        public Person(string name) : base()
+        {
+            Name = name;
+        }
+        public void Print()
+        {
+            Console.WriteLine($"Person {Name}");
+        }
 
-        public Person(string name) { Name = name; }
+
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
+        }
     }
-    class Company /*: IEnumerable*/
+
+    class Employee : Person
     {
-        Person[] personal;
-
-        public Company(Person[] people)
+        public string Company { get; set; }
+        public Employee(string name, string company) : base(name)
         {
-                personal= people;
+            Company = company;
         }
+    }
 
-        //public Company(Person[] people) => personal = people;
-        // индексатор
-        //public Person this[int index]
-        //{
-        //    get => personal[index];
-        //    set => personal[index] = value;
-        //}
-
-        //Индексаторы позволяют индексировать объекты и обращаться к данным по индексу.
-        //Фактически с помощью индексаторов мы можем работать с объектами как с массивами.
-        public Person this[int index]
+    class Client : Person
+    {
+        public string Bank { get; set; }
+        public Client(string name, string bank) : base(name)
         {
-            get { return personal[index]; }
-            set { personal[index] = value; }
-        
+            Bank = bank;
         }
-
-        public IEnumerator GetEnumerator()
-        {
-            return personal.GetEnumerator();
-
-        }
-
-        //IEnumerator IEnumerable.GetEnumerator() 
-        //{ return personal.GetEnumerator(); }
     }
 
 
@@ -52,42 +45,28 @@ namespace Console_Class
     {
         static void Main(string[] args)
         {
-            Company company = new Company(new Person[] { new Person("Dron"), new Person("Lero"),new Person("Nata") });
-            Console.WriteLine(company[0].Name);
-            Person person = company[1]; 
-            Console.WriteLine(person.Name);
-            Console.WriteLine("***");
-            for (int i = 0; i < 3; i++)
-            {
-                Console.WriteLine(company[i].Name);
-            }
-            Console.WriteLine("***");
-            foreach (Person item in company)
-            {
-                Console.WriteLine(item.Name);
-            }
-            Console.WriteLine("***");
-            foreach (var item in company)
-            {
-                Console.WriteLine(((Person)item).Name);
-            }
-            Console.WriteLine("***");
+            //Восходящие преобразования. Upcasting
+            //Объекты производного типа (который находится внизу иерархии) в то же время представляют
+            //и базовый тип. Например, объект Employee в то же время является и объектом класса Person. 
+            Employee employee = new Employee("Tom", "Microsoft");
+            Person person = employee;
+            Console.WriteLine(Equals(person,employee));// указывает на один и тотже обьект
+            //В данном случае переменной person, которая представляет тип Person, присваивается ссылка на
+            //объект Employee. Но чтобы сохранить ссылку на объект одного класса в переменную другого класса,
+            //необходимо выполнить преобразование типов - в данном случае от типа Employee к типу Person.
+            //И так как Employee наследуется от класса Person, то автоматически выполняется неявное
+            //восходящее преобразование - преобразование к типу, которые находятся вверху иерархии классов,
+            //то есть к базовому классу.
 
-            IEnumerator enumerator = company.GetEnumerator();
+            //В итоге переменные employee и person будут указывать на один и тот же объект в памяти,
+            //но переменной person будет доступна только та часть, которая представляет функционал типа Person.
 
-            while (enumerator.MoveNext()) {
+            Console.WriteLine(person.Name +" works of"+ employee.Company);
 
-                Console.WriteLine(((Person)enumerator.Current).Name);
-            }
-            Console.WriteLine("***");
+            //происходит неявное восходящее преобразование
+            Person person1 = new Client("Dron","CrediAg");
+            Console.WriteLine(person1.Name.GetHashCode());
 
-
-            company[0] = new Person("Kampot");
-            Console.WriteLine(company[0].Name);
-
-            person.Name = "Belka";
-            company[2].Name = person.Name;
-            Console.WriteLine(company[2].Name);
 
         }
     }
