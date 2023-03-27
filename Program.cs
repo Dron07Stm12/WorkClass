@@ -162,7 +162,7 @@ namespace Console_Class
 
 
 
-            Console.WriteLine("***");
+            Console.WriteLine("****");
 
             for (int i = 0; i < 3; i++)
             {
@@ -209,6 +209,7 @@ namespace Console_Class
             }
             user["email"] = "D";
             string str2 = user["email"];
+            Console.WriteLine(str2);
             Console.WriteLine(str2);
 
 
